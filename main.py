@@ -9,11 +9,12 @@ import csv
 ctk.set_appearance_mode("light")
 ctk.set_default_color_theme("blue")
 
+
 class BikeSalesApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Bike Sales System")
-        self.geometry("1000x650")  # Better default resolution
+        self.geometry("1000x650")
         self.minsize(800, 600)
         self.configure(bg="#F5F5F5")
 
@@ -33,7 +34,7 @@ class BikeSalesApp(ctk.CTk):
         # Sidebar Title
         ctk.CTkLabel(self.sidebar, text="🚲 Menu", font=self.header_font).pack(pady=(30, 20))
 
-        # Add Buttons
+        # Sidebar Buttons
         self.add_button("🏠 Home", self.show_home)
         self.add_button("➕ Add Sale", self.show_add_sale)
         self.add_button("📆 Daily Sales", self.show_daily_sales)
@@ -52,43 +53,62 @@ class BikeSalesApp(ctk.CTk):
             corner_radius=10,
             width=180,
             height=40,
-            fg_color="#3B82F6",  # Tailwind blue-500
-            hover_color="#2563EB",  # Tailwind blue-600
+            fg_color="#3B82F6",
+            hover_color="#2563EB",
             text_color="white"
         )
-        btn.pack(pady=10, padx=20)  # Horizontal padding to keep button away from edges
+        btn.pack(pady=10, padx=20)
 
     def clear_main_content(self):
         for widget in self.main_content.winfo_children():
             widget.destroy()
-
+            
     def show_home(self):
         self.clear_main_content()
-        ctk.CTkLabel(self.main_content, text="Dashboard", font=("Arial", 22)).pack(pady=10)
+        ctk.CTkLabel(self.main_content, text="📊 Dashboard", font=self.header_font).pack(pady=(30, 5))
 
-        # Time Label
-        self.time_label = ctk.CTkLabel(self.main_content, text="", font=("Arial", 16))
-        self.time_label.pack(pady=5)
-        self.update_time()
+        # 🟦 Card Container Frame with equal spacing as sidebar
+        card_container = ctk.CTkFrame(self.main_content, fg_color="transparent")
+        card_container.pack(pady=20, padx=20, fill="both", expand=True)
 
-        # Load today's sales data
+        # Configure grid responsiveness
+        card_container.grid_columnconfigure((0, 1, 2), weight=1)
+
+        # Fetch today's data
         today_str = datetime.date.today().strftime("%Y-%m-%d")
         sales_today = self.get_sales_for_date(today_str)
-
         total_today = len(sales_today)
-        ctk.CTkLabel(self.main_content, text=f"Total Bikes Sold Today: {total_today}", font=("Arial", 16)).pack(pady=5)
+        recent = sales_today[-1] if sales_today else None
 
-        if sales_today:
-            recent = sales_today[-1]
-            buyer = recent.get("customer_name", "Unknown")
-            model = recent.get("bike_model", "Unknown")
-            ctk.CTkLabel(self.main_content, text=f"Recent Buyer: {buyer} - {model}", font=("Arial", 14)).pack(pady=5)
+        # 🟩 Total Sales Card
+        card1 = ctk.CTkFrame(card_container, corner_radius=12, height=160, fg_color="#E0F2FE")
+        card1.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+        ctk.CTkLabel(card1, text="🛵 Bikes Sold Today", font=self.label_font, text_color="#0369A1").pack(pady=(15, 5))
+        ctk.CTkLabel(card1, text=str(total_today), font=ctk.CTkFont(size=34, weight="bold"), text_color="#0284C7").pack()
+
+        # 🟨 Recent Buyer Card
+        card2 = ctk.CTkFrame(card_container, corner_radius=12, height=160, fg_color="#FEF9C3")
+        card2.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
+        ctk.CTkLabel(card2, text="🧑‍💼 Recent Buyer", font=self.label_font, text_color="#92400E").pack(pady=(15, 5))
+        if recent:
+            buyer_text = f"{recent.get('customer_name', 'N/A')}\n{recent.get('bike_model', '')}"
         else:
-            ctk.CTkLabel(self.main_content, text="No sales yet today.", font=("Arial", 14)).pack(pady=5)
+            buyer_text = "No Sales Yet"
+        ctk.CTkLabel(card2, text=buyer_text, font=ctk.CTkFont(size=14), text_color="#78350F", justify="center").pack()
+
+        # 🕒 Time Card
+        card3 = ctk.CTkFrame(card_container, corner_radius=12, height=160, fg_color="#EDE9FE")
+        card3.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
+        ctk.CTkLabel(card3, text="⏰ Current Time", font=self.label_font, text_color="#5B21B6").pack(pady=(15, 5))
+        self.time_label = ctk.CTkLabel(card3, text="", font=ctk.CTkFont(size=22, weight="bold"), text_color="#6D28D9")
+        self.time_label.pack()
+        self.update_time()
+
+
     def update_time(self):
         if hasattr(self, "time_label") and self.time_label.winfo_exists():
             current_time = time.strftime("%I:%M:%S %p")
-            self.time_label.configure(text=f"Current Time: {current_time}")
+            self.time_label.configure(text=f"{current_time}")
             self.after(1000, self.update_time)
 
     def get_sales_for_date(self, date_str):
@@ -116,19 +136,19 @@ class BikeSalesApp(ctk.CTk):
     # Placeholder pages
     def show_add_sale(self):
         self.clear_main_content()
-        ctk.CTkLabel(self.main_content, text="Add Sale Form", font=("Arial", 18)).pack(pady=20)
+        ctk.CTkLabel(self.main_content, text="Add Sale Form", font=self.header_font).pack(pady=20)
 
     def show_daily_sales(self):
         self.clear_main_content()
-        ctk.CTkLabel(self.main_content, text="Daily Sales View", font=("Arial", 18)).pack(pady=20)
+        ctk.CTkLabel(self.main_content, text="Daily Sales View", font=self.header_font).pack(pady=20)
 
     def show_all_sales(self):
         self.clear_main_content()
-        ctk.CTkLabel(self.main_content, text="All Sales Records", font=("Arial", 18)).pack(pady=20)
+        ctk.CTkLabel(self.main_content, text="All Sales Records", font=self.header_font).pack(pady=20)
 
     def show_summary(self):
         self.clear_main_content()
-        ctk.CTkLabel(self.main_content, text="Sales Summary", font=("Arial", 18)).pack(pady=20)
+        ctk.CTkLabel(self.main_content, text="Sales Summary", font=self.header_font).pack(pady=20)
 
 
 if __name__ == "__main__":
