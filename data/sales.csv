@@ -1,3 +1,2 @@
-customer_id,bike_model,chassis_number,engine_number,color,sale_date
-1,CD 70,jf0000,v00000,Red,2025-07-03
-2,CG 125,jhdsfsd,ksjsdfh,Red,2025-07-03
+customer_id,bike_model,color,quantity,sale_date
+1,CD 70,Red,1,2025-07-03
