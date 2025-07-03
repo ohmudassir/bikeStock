@@ -6,7 +6,7 @@ import os
 import csv
 
 # Setup theme
-ctk.set_appearance_mode("light")
+ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
 
@@ -81,26 +81,26 @@ class BikeSalesApp(ctk.CTk):
         recent = sales_today[-1] if sales_today else None
 
         # 🟩 Total Sales Card
-        card1 = ctk.CTkFrame(card_container, corner_radius=12, height=160, fg_color="#E0F2FE")
+        card1 = ctk.CTkFrame(card_container, corner_radius=12, height=160, fg_color="#1E3A8A")
         card1.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
-        ctk.CTkLabel(card1, text="🛵 Bikes Sold Today", font=self.label_font, text_color="#0369A1").pack(pady=(15, 5))
-        ctk.CTkLabel(card1, text=str(total_today), font=ctk.CTkFont(size=34, weight="bold"), text_color="#0284C7").pack()
+        ctk.CTkLabel(card1, text="🛵 Bikes Sold Today", font=self.label_font, text_color="white").pack(pady=(15, 5))
+        ctk.CTkLabel(card1, text=str(total_today), font=ctk.CTkFont(size=34, weight="bold"), text_color="#93C5FD").pack()
 
         # 🟨 Recent Buyer Card
-        card2 = ctk.CTkFrame(card_container, corner_radius=12, height=160, fg_color="#FEF9C3")
+        card2 = ctk.CTkFrame(card_container, corner_radius=12, height=160, fg_color="#78350F")
         card2.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
-        ctk.CTkLabel(card2, text="🧑‍💼 Recent Buyer", font=self.label_font, text_color="#92400E").pack(pady=(15, 5))
+        ctk.CTkLabel(card2, text="🧑‍💼 Recent Buyer", font=self.label_font, text_color="white").pack(pady=(15, 5))
         if recent:
             buyer_text = f"{recent.get('customer_name', 'N/A')}\n{recent.get('bike_model', '')}"
         else:
             buyer_text = "No Sales Yet"
-        ctk.CTkLabel(card2, text=buyer_text, font=ctk.CTkFont(size=14), text_color="#78350F", justify="center").pack()
+        ctk.CTkLabel(card2, text=buyer_text, font=ctk.CTkFont(size=14), text_color="#FDE68A", justify="center").pack()
 
         # 🕒 Time Card
-        card3 = ctk.CTkFrame(card_container, corner_radius=12, height=160, fg_color="#EDE9FE")
+        card3 = ctk.CTkFrame(card_container, corner_radius=12, height=160, fg_color="#4C1D95")
         card3.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
-        ctk.CTkLabel(card3, text="⏰ Current Time", font=self.label_font, text_color="#5B21B6").pack(pady=(15, 5))
-        self.time_label = ctk.CTkLabel(card3, text="", font=ctk.CTkFont(size=22, weight="bold"), text_color="#6D28D9")
+        ctk.CTkLabel(card3, text="⏰ Current Time", font=self.label_font, text_color="white").pack(pady=(15, 5))
+        self.time_label = ctk.CTkLabel(card3, text="", font=ctk.CTkFont(size=22, weight="bold"), text_color="#DDD6FE")
         self.time_label.pack()
         self.update_time()
 
